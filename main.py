@@ -30,4 +30,8 @@ if __name__ == "__main__":
     out = Path("/output/entry.txt")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(WORD, encoding="utf-8")
+    # Round-trip verify: the gate reads this file, so confirm byte-exactly
+    # what was written before reporting success.
+    if out.read_bytes() != WORD.encode("utf-8"):
+        raise SystemExit("round-trip verify failed: /output/entry.txt mismatch")
     print(f"Wrote {len(WORD)} chars to /output/entry.txt")
